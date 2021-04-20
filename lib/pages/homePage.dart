@@ -63,7 +63,7 @@ class _HomeScreenState extends State<HomeScreen> {
         onPressed: () {
           showGeneralDialog(
               context: context,
-              transitionDuration: Duration(milliseconds: 350),
+              transitionDuration: Duration(milliseconds: 320),
               pageBuilder: (
                 context,
                 a1,
@@ -94,23 +94,20 @@ class _HomeScreenState extends State<HomeScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text("You must have an internet connection to continue"),
-                  TextButton(
-                    onPressed: () {
-                      Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => HomeScreen(),
-                          ),
-                          (Route<dynamic> route) => false);
-                    },
-                    child: Text("Try Again"),
-                  ),
+                  tryButton(context, phoneSize),
                 ],
               ),
             );
           }
           if (result.hasException) {
-            return Text(result.exception.toString());
+            return Center(
+                child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(result.exception.toString()),
+                tryButton(context, phoneSize),
+              ],
+            ));
           }
           if (result.loading) {
             return Center(
@@ -150,6 +147,31 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           );
         },
+      ),
+    );
+  }
+
+  tryButton(BuildContext context, Size phoneSize) {
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: phoneSize.height * .05),
+      child: Container(
+        width: phoneSize.width * .3,
+        decoration: BoxDecoration(
+            color: Colors.red, borderRadius: BorderRadius.circular(15)),
+        child: TextButton(
+          onPressed: () {
+            Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => HomeScreen(),
+                ),
+                (Route<dynamic> route) => false);
+          },
+          child: Text(
+            "Try Again",
+            style: TextStyle(color: Colors.white),
+          ),
+        ),
       ),
     );
   }
